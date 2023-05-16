@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>電卓</title>
+  <style>
+    .calculator {
+      width: 200px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly>
+    <br>
+    <button onclick="appendToDisplay('7')">7</button>
+    <button onclick="appendToDisplay('8')">8</button>
+    <button onclick="appendToDisplay('9')">9</button>
+    <button onclick="appendToDisplay('+')">+</button>
+    <br>
+    <button onclick="appendToDisplay('4')">4</button>
+    <button onclick="appendToDisplay('5')">5</button>
+    <button onclick="appendToDisplay('6')">6</button>
+    <button onclick="appendToDisplay('-')">-</button>
+    <br>
+    <button onclick="appendToDisplay('1')">1</button>
+    <button onclick="appendToDisplay('2')">2</button>
+    <button onclick="appendToDisplay('3')">3</button>
+    <button onclick="appendToDisplay('*')">*</button>
+    <br>
+    <button onclick="appendToDisplay('0')">0</button>
+    <button onclick="appendToDisplay('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="appendToDisplay('/')">/</button>
+    <br>
+    <button onclick="clearDisplay()">C</button>
+  </div>
+
+  <script>
+    var soundEffects = {
+      '79': 'audio/79.mp3',
+      '810': 'audio/810.mp3',
+      '109': 'audio/109.mp3',
+      '566': 'audio/566.mp3',
+      '1649': 'audio/1649.mp3'
+    //   '500': 'path_to_sound_effect_3.mp3'
+      // 他の特定の数字と効果音のパスを追加してください
+    };
+
+    function createAudioElement(path) {
+      var audio = new Audio();
+      audio.src = path;
+      return audio;
+    }
+
+    var audioElements = {};
+    for (var number in soundEffects) {
+      audioElements[number] = createAudioElement(soundEffects[number]);
+    }
+
+    function appendToDisplay(value) {
+      var display = document.getElementById("display");
+      display.value += value;
+    }
+
+    function calculate() {
+      var display = document.getElementById("display");
+      var result = eval(display.value);
+      display.value = result;
+
+      if (result in audioElements) {
+        playSoundEffect(result);
+      }
+    }
+
+    function clearDisplay() {
+      var display = document.getElementById("display");
+      display.value = "";
+    }
+
+    function playSoundEffect(number) {
+      var audio = audioElements[number];
+      audio.play();
+    }
+  </script>
+</body>
+</html>
