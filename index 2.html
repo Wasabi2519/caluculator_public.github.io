@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>じゃんけんゲーム</title>
+</head>
+<body>
+    <h1>じゃんけんゲーム</h1>
+    <button onclick="playGame('グー')">グー</button>
+    <button onclick="playGame('チョキ')">チョキ</button>
+    <button onclick="playGame('パー')">パー</button>
+    <button onclick="connectBluetooth()">Bluetooth接続</button>
+
+    <p id="result"></p>
+
+    <script>
+        let device = null;
+        let characteristic = null;
+
+        async function connectBluetooth() {
+            try {
+                console.log("Bluetoothデバイスを探しています...");
+                device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true, // すべてのデバイスを表示
+                    optionalServices: ['0000xxxx-0000-1000-8000-00805f9b34fb'] // ここにサービスのUUIDを指定
+                });
+
+                console.log("GATTサーバーに接続しています...");
+                const server = await device.gatt.connect();
+
+                console.log("プライマリサービスを取得しています...");
+                const service = await server.getPrimaryService('0000xxxx-0000-1000-8000-00805f9b34fb'); // ここにサービスのUUIDを指定
+
+                console.log("特性を取得しています...");
+                characteristic = await service.getCharacteristic('0000xxxx-0000-1000-8000-00805f9b34fb'); // ここに特性のUUIDを指定
+
+                console.log("Bluetoothデバイスに接続しました。");
+            } catch (error) {
+                console.error('Bluetooth接続に失敗:', error);
+            }
+        }
+
+        function playGame(userChoice) {
+            // ...（じゃんけんロジックは変わらず）...
+        }
+    </script>
+</body>
+</html>
